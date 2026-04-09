@@ -1,3 +1,4 @@
+import Content from '../Content'
 import Header from '../Header'
 import Item from '../Item'
 import Menu from '../Menu'
@@ -9,10 +10,12 @@ function App() {
     <>
       <div className={styles.app}>
         <Header />
-        <Item />
-        <Item />
-        <Item />
-        <Item />
+        <Content>
+          <Item />
+          <Item />
+          <Item />
+          <Item />
+        </Content>
         <Menu />
       </div>
     </>
