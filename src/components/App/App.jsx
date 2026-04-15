@@ -1,4 +1,4 @@
-import { FloatingButton } from '../../shared/ui/buttons'
+import { ButtonContainer, FloatingButton } from '../../shared/ui/buttons'
 import Content from '../Content'
 import Header from '../Header'
 import Item from '../Item'
@@ -9,6 +9,7 @@ function App() {
 
   return (
     <>
+      <ButtonContainer>
       <div className={styles.app}>
         <Header />
         <Content>
@@ -20,6 +21,7 @@ function App() {
         </Content>
         <Menu />
       </div>
+      </ButtonContainer>
     </>
   )
 
