@@ -3,6 +3,7 @@ import Content from '../Content'
 import Header from '../Header'
 import Items from '../../pages/Items'
 import Menu from '../Menu'
+import Stats from '../../pages/Stats'
 import styles from './App.module.scss'
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
       <div className={styles.app}>
         <Header />
         <Content>
-          <Items />
+          <Stats />
         </Content>
         <Menu />
       </div>
