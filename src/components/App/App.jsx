@@ -3,6 +3,7 @@ import Content from '../Content'
 import Header from '../Header'
 import Items from '../../pages/Items'
 import Menu from '../Menu'
+import Settings from '../../pages/Settings'
 import Stats from '../../pages/Stats'
 import styles from './App.module.scss'
 
@@ -14,7 +15,7 @@ function App() {
       <div className={styles.app}>
         <Header />
         <Content>
-          <Stats />
+          <Settings />
         </Content>
         <Menu />
       </div>
