@@ -39,6 +39,12 @@ function ItemForm(props) {
     navigate(-1, { viewTransition: true })
   }
 
+  // Käsittelee nykyisen poistamisen.
+  const handleDelete = () => {
+    props.onItemDelete(values.id)
+    navigate(-1, { viewTransition: true })
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -95,6 +101,14 @@ function ItemForm(props) {
               </Button>
             </div>
           </div>
+          { props.onItemDelete ?
+            <div className={styles.itemform_row}>
+              <div>
+                <Button warning onClick={handleDelete}>POISTA</Button>
+              </div>
+              <div></div>
+            </div>
+            : null }
         </div>
       </form>
     </div>

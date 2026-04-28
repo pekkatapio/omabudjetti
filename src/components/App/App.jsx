@@ -7,6 +7,20 @@ function App() {
   // Sovelluksen merkintädata, joka välitetään eteenpäin reitittäjälle.
   const [data, setData] = useState(testdata)
 
+  // Poistaa rivin sovelluksen datasta id:n perusteella.
+  const handleItemDelete = (id) => {
+
+    // Tehdään kopio nykyisestä datasta.
+    let copy = data.slice()
+
+    // Suodatetaan pois se rivi, jonka id vastaa poistettavaa id:tä.
+    copy = copy.filter(item => item.id !== id)
+
+    // Päivitetään state suodatetulla datalla.
+    setData(copy)
+
+  }
+
   // Käsittelee ja tallentaa lomakkeelle syötetyistä
   // tiedoista uuden rivin tai muokkaa olemassaolevaa.
   const handleItemSubmit = (newitem) => {
@@ -38,7 +52,9 @@ function App() {
 
   return (
     <>
-      <AppRouter data={data} onItemSubmit={handleItemSubmit} />
+      <AppRouter data={data}
+                 onItemSubmit={handleItemSubmit}
+                 onItemDelete={handleItemDelete} />
     </>
   )
 }
