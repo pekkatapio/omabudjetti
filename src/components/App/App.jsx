@@ -1,14 +1,34 @@
 import AppRouter from '../../router/AppRouter'
 import { useState } from 'react'
 import useLocalStorage from '../../shared/hooks/uselocalstorage'
+import firebase from './firebase.js'
+import { collection, getFirestore, onSnapshot  } from 'firebase/firestore'
+import { useEffect } from 'react'
 
 function App() {
 
   // Sovelluksen merkintädata, joka välitetään eteenpäin reitittäjälle.
-  const [data, setData] = useLocalStorage('omabudjetti-data',[])
+  const [data, setData] = useState([])
 
   // Sovelluksen kulutyypit, jotka välitetään eteenpäin reitittäjälle.
   const [typelist, setTypelist] = useLocalStorage('omabudjetti-typelist',[])
+
+  // Alustetaan Firestore-tietokantayhteys annetulla Firebase-sovelluksella.
+  const firestore = getFirestore(firebase)
+
+  // useEffect-kuuntelija, joka hakee Firestoresta item-kokoelman tiedot
+  // reaaliaikaisesti ja päivittää ne data-muuttujaan aina, kun kokoelman
+  // sisältö muuttuu.
+  useEffect( () => {
+    const unsubscribe = onSnapshot(collection(firestore,'item'), snapshot => {
+      const newData = []
+      snapshot.forEach( doc => {
+        newData.push({ ...doc.data(), id: doc.id })
+      })
+      setData(newData)
+    })
+    return unsubscribe
+  }, [])
 
   // Poistaa rivin sovelluksen datasta id:n perusteella.
   const handleItemDelete = (id) => {
