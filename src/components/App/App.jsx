@@ -2,7 +2,7 @@ import AppRouter from '../../router/AppRouter'
 import { useState } from 'react'
 import useLocalStorage from '../../shared/hooks/uselocalstorage'
 import firebase from './firebase.js'
-import { collection, deleteDoc, doc, getFirestore, onSnapshot, setDoc  } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, setDoc  } from 'firebase/firestore'
 import { useEffect } from 'react'
 
 function App() {
@@ -18,9 +18,12 @@ function App() {
 
   // useEffect-kuuntelija, joka hakee Firestoresta item-kokoelman tiedot
   // reaaliaikaisesti ja päivittää ne data-muuttujaan aina, kun kokoelman
-  // sisältö muuttuu.
+  // sisältö muuttuu. Noudettavat tiedot lajitellaan maksupäivän mukaan
+  // laskevasti.
   useEffect( () => {
-    const unsubscribe = onSnapshot(collection(firestore,'item'), snapshot => {
+    const unsubscribe = onSnapshot(query(collection(firestore,'item'),
+                                         orderBy('paymentDate', 'desc')),
+                                   snapshot => {
       const newData = []
       snapshot.forEach( doc => {
         newData.push({ ...doc.data(), id: doc.id })
