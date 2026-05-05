@@ -1,9 +1,11 @@
 import AppRouter from '../../router/AppRouter'
 import { useState } from 'react'
 import useLocalStorage from '../../shared/hooks/uselocalstorage'
-import firebase from './firebase.js'
+import firebase, { auth } from './firebase.js'
 import { addDoc, collection, deleteDoc, doc, getFirestore, onSnapshot, orderBy, query, setDoc  } from 'firebase/firestore'
 import { useEffect } from 'react'
+import { onAuthStateChanged } from 'firebase/auth'
+import Startup from '../../pages/Startup'
 
 function App() {
 
@@ -12,6 +14,9 @@ function App() {
 
   // Sovelluksen kulutyypit, jotka välitetään eteenpäin reitittäjälle.
   const [typelist, setTypelist] = useState([])
+
+  // Sovellukseen kirjautuneen käyttäjän tiedot.
+  const [user, setUser] = useState()
 
   // Alustetaan Firestore-tietokantayhteys annetulla Firebase-sovelluksella.
   const firestore = getFirestore(firebase)
@@ -49,6 +54,15 @@ function App() {
     return unsubscribe
   }, [])
 
+  // useEffect-kuuntelija, joka seuraa Firebase Authenticationin
+  // kirjautumistilan muutoksia ja tallentaa kirjautuneen käyttäjän
+  // tiedot user-muuttujaan.
+  useEffect( () => {
+    onAuthStateChanged(auth, user => {
+      setUser(user)
+    })
+  }, [])
+
   // Poistaa olemassa olevan tuotteen Firestore-tietokannasta
   // item-kokoelmasta annetun dokumentin id-tunnisteen perusteella.
   const handleItemDelete = async (id) => {
@@ -69,11 +83,14 @@ function App() {
 
   return (
     <>
-      <AppRouter data={data}
-                 typelist={typelist}
-                 onItemSubmit={handleItemSubmit}
-                 onItemDelete={handleItemDelete}
-                 onTypeSubmit={handleTypeSubmit} />
+      { user ?
+          <AppRouter data={data}
+                     typelist={typelist}
+                     onItemSubmit={handleItemSubmit}
+                     onItemDelete={handleItemDelete}
+                     onTypeSubmit={handleTypeSubmit} />
+        : <Startup auth={auth} />
+      }
     </>
   )
 }
