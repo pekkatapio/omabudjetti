@@ -3,6 +3,7 @@ import AddItem from '../../pages/AddItem'
 import EditItem from '../../pages/EditItem'
 import ErrorPage from '../../pages/ErrorPage'
 import Items from '../../pages/Items'
+import Loader from '../../pages/Loader'
 import MainLayout from '../../layout/MainLayout'
 import Settings from '../../pages/Settings'
 import Stats from '../../pages/Stats'
@@ -47,6 +48,7 @@ function AppRouter(props) {
       path: "/",
       element: <MainLayout />,
       errorElement: <ErrorPage />,
+      hydrateFallbackElement: <Loader />,
       children: [
         { path: "",
           element: <Items />,
